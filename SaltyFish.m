@@ -2,34 +2,43 @@ clear;clc
 tic
 
 Bet_1   = 1 ;
-MaxFish = 1000 ;
+MaxFish = 100000 ;
 
-InitialFish_min = 100 ;
-InitialFish_max = 110 ;
-resolution   = 10 ;
+InitialFish_min = 1000 ;
+InitialFish_max = 1000 ;
+resolution_i    = 100 ;
+resolution_j    = InitialFish_max - InitialFish_min + 1 ;
+
 run = 100 ;
 min = InitialFish_min+1 ;
-isWin = zeros(InitialFish_max-InitialFish_min+1,resolution) ;
+isWin = zeros(resolution_i,resolution_j) ;
 
-parfor InitialFish = InitialFish_min : InitialFish_max
-    
-    for maxbet = 1 : resolution
-        MaxBet = maxbet/resolution ;
+parfor i = 1 : resolution_i
+    MaxBet = i/resolution_i ;
+    for j = 1 : resolution_j
+        InitialFish = InitialFish_min + j - 1 ;
         p = 0 ;
-        for i = 1 : run
+        for t = 1 : run
             result = bet(InitialFish,Bet_1,MaxFish,MaxBet) > 0 ;
             p = p + result ;
         end
-        isWin(InitialFish-InitialFish_min+1,maxbet) = p/run ;
+        isWin(i,j) = p/run ;
     end
 end
 
-imagesc(InitialFish_min:InitialFish_max,1/resolution:1/resolution:1,isWin')
+MaxBet = 1/resolution_i : 1/resolution_i : 1 ;
+InitialFish = InitialFish_min : InitialFish_max ;
+
+imagesc(MaxBet,InitialFish,isWin')
 set(gca,'YDir','normal')
-xlabel('Initial Fish')
-ylabel('Max Bet')
+xlabel('Max Bet')
+ylabel('Initial Fish')
 colormap(jet(128))
 caxis([0 1])
 colorbar
+
+plot(MaxBet,isWin(:,1),'b.-')
+xlabel('Max Bet')
+ylabel('Probability of rich')
 
 toc
