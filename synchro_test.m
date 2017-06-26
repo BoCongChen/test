@@ -1,6 +1,6 @@
 clear;clc
 x = 0 : 0.001 : 1 ;
-r = 3.4 ; e = 0 ; g = 0.3 ;
+r = 3.4 ; e = 0 ; g = 0.8 ;
 L = 10 ; N = L^2 ;
 A = netgenerate([L L],'square') ;
 step = 100 ;
@@ -11,6 +11,8 @@ xx = rand(N-1,1) ;
 plot(x,x0,'b.')
 title('n = 0')
 axis([0 1 0 1])
+xlabel('x_0')
+ylabel('x_n')
 pause
 
 for n = 1 : step
@@ -22,6 +24,8 @@ for n = 1 : step
     
     plot(x,x0,'b.')
     title(['n = ',num2str(n)])
+    xlabel('x_0')
+    ylabel('x_n')
     axis([0 1 0 1])
     pause
 end
